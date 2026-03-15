@@ -10,7 +10,7 @@ public class Grid {
   public final int rows;
   public final int cols;
 
-  private List<Cell> cells;
+  private final List<Cell> cells;
 
   public Grid(int rows, int cols) {
     this.rows = rows;
@@ -26,6 +26,7 @@ public class Grid {
     }
   }
 
+  /** Returns a {@link Slot} starting from the specified row and col, direction and length */
   public Slot getSlot(int row, int col, Direction dir, int length) {
     Cell[] slotCells = new Cell[length];
     int currentRow = row, currentCol = col, currentLength = 0;
@@ -38,8 +39,7 @@ public class Grid {
         currentRow += dir.row;
         currentCol += dir.col;
         currentLength++;
-      } catch (Exception e) {
-        e.printStackTrace();
+      } catch (Exception ignored) {
         return null;
       }
     }

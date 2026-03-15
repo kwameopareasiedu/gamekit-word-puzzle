@@ -4,6 +4,6 @@ package dev.gamekit.wordpuzzle.data;
 public record Cell(int row, int col, int index) {
   @Override
   public String toString() {
-    return String.format("Cell(R:%d,C:%d)", row, col);
+    return String.format("Cell(R:%2d,C:%2d)", row, col);
   }
 }
