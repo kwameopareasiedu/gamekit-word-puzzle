@@ -1,6 +1,6 @@
 package dev.gamekit.wordpuzzle.data;
 
-/** Represents a list of grid positions in a specified {@link Direction} */
+/** Represents a list of positions which form a straight line in a specified {@link Direction} */
 public record Slot(int[][] positions, Direction dir, int length) {
   /**
    * Checks if this slot intersects with another slot and returns an integer array containing the indices of the

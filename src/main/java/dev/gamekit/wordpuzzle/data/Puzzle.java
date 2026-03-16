@@ -2,6 +2,7 @@ package dev.gamekit.wordpuzzle.data;
 
 import java.util.*;
 
+/** A representation of the word puzzle board, with methods to initialize, place words and query the board */
 public class Puzzle {
   public final String[] chars;
   public final int rows;
@@ -120,6 +121,7 @@ public class Puzzle {
     printGrid(wordSlotMap.values().stream().toList());
   }
 
+  /** Returns the word formed by a {@link Slot} */
   public String getSlotWord(Slot slot) {
     StringBuilder s = new StringBuilder();
 
@@ -131,6 +133,11 @@ public class Puzzle {
     return s.toString();
   }
 
+  /**
+   * Finds a valid {@link Slot} from the provided start and end positions
+   *
+   * @return A valid slot or {@code null}
+   */
   public Slot getSlot(int startRow, int startCol, int endRow, int endCol) {
     Direction[] directions = Direction.values();
 
@@ -166,6 +173,11 @@ public class Puzzle {
     return null;
   }
 
+  /**
+   * Finds a valid {@link Slot} from the provided start position, direction and length
+   *
+   * @return A valid slot or {@code null}
+   */
   private Slot getSlot(int startRow, int startCol, Direction dir, int length) {
     int[][] positions = new int[length][2];
     int row = startRow, col = startCol, len = 0;
@@ -199,7 +211,7 @@ public class Puzzle {
     }
   }
 
-  /** Prints the cells of the grid contained in one or more of the provided word slots */
+  /** Prints the cells of the grid contained in one or more of the provided word {@link Slot slots} */
   private void printGrid(List<Slot> wordSlots) {
     for (int r = 1; r <= rows; r++) {
       for (int c = 1; c <= cols; c++) {

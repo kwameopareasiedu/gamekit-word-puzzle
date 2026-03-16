@@ -13,6 +13,10 @@ import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A custom {@link Panel} widget which allows words on the puzzle to be highlighted and also marks the positions of
+ * discovered words
+ */
 public class GestureDetector extends Panel {
   private static final Color BG_COLOR = Color.DARK_GRAY;
   private static final Stroke LINE_STROKE = new BasicStroke(56, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
