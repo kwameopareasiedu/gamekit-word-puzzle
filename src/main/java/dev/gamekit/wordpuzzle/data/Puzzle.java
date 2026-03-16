@@ -13,6 +13,7 @@ public class Puzzle {
     this.rows = rows;
     this.cols = cols;
 
+    // Get unique word length
     final Set<Integer> wordLengths = new HashSet<>();
     final int maxWordLength = Math.max(rows, cols);
 
@@ -30,6 +31,7 @@ public class Puzzle {
 
     Random rnd = new Random();
 
+    // Randomize the grid cells
     cells = new char[rows][cols];
 
     for (int r = 1; r <= rows; r++) {
@@ -38,6 +40,7 @@ public class Puzzle {
       }
     }
 
+    // For each unique word length, get the possible grid slots
     Map<Integer, List<Slot>> lengthSlotMap = new HashMap<>();
 
     for (int len : wordLengths) {
@@ -56,6 +59,7 @@ public class Puzzle {
       lengthSlotMap.put(len, slots);
     }
 
+    // Place the words on the grid by computing valid slots for each one
     Map<String, Slot> wordSlotMap = new HashMap<>();
 
     for (String word : words) {
@@ -101,6 +105,7 @@ public class Puzzle {
       }
     }
 
+    // Create a 1-D array of the grid
     chars = new String[rows * cols];
 
     for (int r = 1; r <= rows; r++) {
@@ -172,6 +177,7 @@ public class Puzzle {
     return null;
   }
 
+  /** Prints the cells of the grid */
   private void printGrid() {
     for (int r = 1; r <= rows; r++) {
       for (int c = 1; c <= cols; c++) {
@@ -182,6 +188,7 @@ public class Puzzle {
     }
   }
 
+  /** Prints the cells of the grid contained in one or more of the provided word slots */
   private void printGrid(List<Slot> wordSlots) {
     for (int r = 1; r <= rows; r++) {
       for (int c = 1; c <= cols; c++) {

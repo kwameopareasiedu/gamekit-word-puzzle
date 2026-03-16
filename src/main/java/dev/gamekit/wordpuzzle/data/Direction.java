@@ -11,6 +11,7 @@ public enum Direction {
   WEST(0, -1),
   NORTH_WEST(-1, -1);
 
+  /** Subset of directions in which English is read */
   public static final Direction[] READABLE = new Direction[]{
     NORTH_EAST,
     EAST,

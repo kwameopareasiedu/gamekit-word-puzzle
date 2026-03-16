@@ -3,9 +3,8 @@ package dev.gamekit.wordpuzzle.data;
 /** Represents a list of grid positions in a specified {@link Direction} */
 public record Slot(int[][] positions, Direction dir, int length) {
   /**
-   * Checks if this slot intersects with another slot and
-   * returns an integer array containing the indices of
-   * the intersecting positions
+   * Checks if this slot intersects with another slot and returns an integer array containing the indices of the
+   * intersecting positions
    */
   public int[] intersectsWith(Slot otherSlot) {
     for (int idx = 0; idx < positions.length; idx++) {

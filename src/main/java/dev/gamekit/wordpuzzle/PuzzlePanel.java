@@ -10,7 +10,7 @@ import dev.gamekit.wordpuzzle.data.Slot;
 import java.awt.*;
 
 public class PuzzlePanel extends Panel {
-  private static final Color TRANSPARENT = new Color(0x00000000, true);
+  private static final Color BG_COLOR = Color.DARK_GRAY;
   private static final Stroke LINE_STROKE = new BasicStroke(56, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
   private static final Color LINE_COLOR = Color.GREEN;
 
@@ -27,7 +27,7 @@ public class PuzzlePanel extends Panel {
 
   public static PuzzlePanel create(Puzzle puzzle) {
     PanelConfig config = new PanelConfig();
-    config.color = TRANSPARENT;
+    config.color = BG_COLOR;
     config.cornerRadius = 32;
 
     return new PuzzlePanel(config, puzzle);
