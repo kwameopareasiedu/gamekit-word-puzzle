@@ -3,8 +3,10 @@ package dev.gamekit.wordpuzzle.data;
 import java.util.*;
 
 public class Puzzle {
-  private final int rows;
-  private final int cols;
+  public final String[] chars;
+  public final int rows;
+  public final int cols;
+
   private final char[][] cells;
 
   public Puzzle(int rows, int cols, String[] words) {
@@ -70,7 +72,6 @@ public class Puzzle {
           int[] intersection = selectedSlot.intersectsWith(pair.getValue());
 
           if (intersection != null) {
-            // TODO: Check if word letters at intersection indices are the same
             char wordCharAtIntersection = word.charAt(intersection[0]);
             char otherWordCharAtIntersection = pair.getKey().charAt(intersection[1]);
 
@@ -98,6 +99,17 @@ public class Puzzle {
 
           break;
         }
+      }
+    }
+
+    chars = new String[rows * cols];
+
+    for (int r = 1; r <= rows; r++) {
+      for (int c = 1; c <= cols; c++) {
+        int row = r - 1, col = c - 1;
+        int index = row * cols + col;
+
+        chars[index] = String.valueOf(cells[row][col]);
       }
     }
 
@@ -137,8 +149,6 @@ public class Puzzle {
   }
 
   private void printGrid(List<Slot> wordSlots) {
-    System.out.println(wordSlots.get(0).positions().length);
-
     for (int r = 1; r <= rows; r++) {
       for (int c = 1; c <= cols; c++) {
         char character = '-';
