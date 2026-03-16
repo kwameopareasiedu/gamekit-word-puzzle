@@ -1,7 +1,6 @@
 package dev.gamekit.wordpuzzle.ui;
 
 import dev.gamekit.ui.events.MouseEvent;
-import dev.gamekit.ui.widgets.Empty;
 import dev.gamekit.ui.widgets.Panel;
 import dev.gamekit.ui.widgets.PanelConfig;
 import dev.gamekit.ui.widgets.Widget;
@@ -30,19 +29,17 @@ public class GestureDetector extends Panel {
   private double colSize, rowSize;
   private int startRow = 0, startCol = 0, endRow = 0, endCol = 0;
 
-  private GestureDetector(PanelConfig config, Puzzle puzzle, ValueCallback<Slot> onSlotMarked) {
-    super(config, new Empty());
-    this.puzzle = puzzle;
-    this.onSlotMarked = onSlotMarked;
+  private GestureDetector(GestureDetectorConfig config, Widget child) {
+    super(config, child);
   }
 
-  public static GestureDetector create(GestureDetectorConfig.Updater updater) {
+  public static GestureDetector create(GestureDetectorConfig.Updater updater, Widget child) {
     GestureDetectorConfig config = new GestureDetectorConfig();
     updater.update(config);
     config.color = BG_COLOR;
     config.cornerRadius = 32;
 
-    return new GestureDetector(config, config.puzzle, config.onSlotMarked);
+    return new GestureDetector(config, child);
   }
 
   @Override

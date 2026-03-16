@@ -2,7 +2,10 @@ package dev.gamekit.wordpuzzle;
 
 import dev.gamekit.core.Renderer;
 import dev.gamekit.core.Scene;
+import dev.gamekit.ui.enums.Alignment;
+import dev.gamekit.ui.enums.CrossAxisAlignment;
 import dev.gamekit.ui.widgets.*;
+import dev.gamekit.ui.widgets.Panel;
 import dev.gamekit.wordpuzzle.data.Puzzle;
 import dev.gamekit.wordpuzzle.data.Slot;
 import dev.gamekit.wordpuzzle.ui.GestureDetector;
@@ -33,43 +36,77 @@ public class PuzzleScene extends Scene {
 
   @Override
   protected Widget createUI() {
-    return Center.create(
-      Sized.create(
+    return Stack.create(
+      Align.create(
         props -> {
-          props.fixedWidth = 768.0;
-          props.fixedHeight = 768.0;
+          props.horizontalAlignment = Alignment.START;
+          props.verticalAlignment = Alignment.CENTER;
         },
-        Stack.create(
-          Sized.create(
-            props -> {
-              props.fractionalWidth = 1.0;
-              props.fractionalHeight = 1.0;
-            },
-            GestureDetector.create(
+        Padding.create(
+          96,
+          Column.create(
+            props -> props.crossAxisAlignment = CrossAxisAlignment.CENTER, Text.create(
               props -> {
-                props.puzzle = puzzle;
-                props.validSlots = validSlots;
-                props.onSlotMarked = this::onSlotMarked;
+                props.text = "Find These Words";
+                props.fontSize = 32;
               }
-            )
-          ),
-          Grid.create(
-            props -> {
-              props.columnCount = puzzle.cols;
-              props.columnGapSize = props.rowGapSize = 0;
-            },
-            Arrays.stream(puzzle.chars).map(
-              (ch) -> Center.create(
-                Text.create(
+            ),
+            Gap.create(16, 16),
+            Column.create(
+              props -> props.crossAxisAlignment = CrossAxisAlignment.CENTER,
+              Arrays.stream(WORDS).map(
+                word -> Panel.create(
                   props -> {
-                    props.text = ch;
-                    props.fontStyle = Text.BOLD;
-                    props.fontSize = 36;
-                    props.fontHeightRatio = 0.8;
-                  }
+                    props.cornerRadius = 32;
+                    props.color = foundWords.contains(word) ? Color.GREEN : Color.ORANGE;
+                  },
+                  Padding.create(
+                    20, 28,
+                    Text.create(
+                      props -> {
+                        props.text = word;
+                        props.color = Color.BLACK;
+                        props.fontStyle = Text.BOLD;
+                        props.fontSize = 24;
+                      }
+                    )
+                  )
                 )
-              )
-            ).toArray(Widget[]::new)
+              ).toArray(Widget[]::new)
+            )
+          )
+        )
+      ),
+      Center.create(
+        Sized.create(
+          props -> {
+            props.fixedWidth = 768.0;
+            props.fixedHeight = 768.0;
+          },
+          GestureDetector.create(
+            (GestureDetector.GestureDetectorConfig.Updater) props -> {
+              props.puzzle = puzzle;
+              props.validSlots = validSlots;
+              props.onSlotMarked = this::onSlotMarked;
+            },
+            Grid.create(
+              props -> {
+                props.columnCount = puzzle.cols;
+                props.columnGapSize = props.rowGapSize = 0;
+              },
+              Arrays.stream(puzzle.chars).map(
+                (ch) -> Center.create(
+                  Text.create(
+                    props -> {
+                      props.text = ch;
+                      props.fontStyle = Text.BOLD;
+                      props.fontSize = 36;
+                      props.fontHeightRatio = 0.8;
+                    }
+                  )
+                )
+              ).toArray(Widget[]::new)
+            )
           )
         )
       )
