@@ -24,13 +24,20 @@ public class PuzzleScene extends Scene {
 
   @Override
   protected Widget createUI() {
-    return Stack.create(
-      Center.create(
-        Sized.create(
-          props -> {
-            props.fixedWidth = 768.0;
-            props.fixedHeight = 768.0;
-          },
+    return Center.create(
+      Sized.create(
+        props -> {
+          props.fixedWidth = 768.0;
+          props.fixedHeight = 768.0;
+        },
+        Stack.create(
+          Sized.create(
+            props -> {
+              props.fractionalWidth = 1.0;
+              props.fractionalHeight = 1.0;
+            },
+            PuzzlePanel.create(puzzle)
+          ),
           Grid.create(
             props -> {
               props.columnCount = puzzle.cols;
@@ -43,6 +50,7 @@ public class PuzzleScene extends Scene {
                     props.text = ch;
                     props.fontStyle = Text.BOLD;
                     props.fontSize = 36;
+                    props.fontHeightRatio = 0.8;
                   }
                 )
               )

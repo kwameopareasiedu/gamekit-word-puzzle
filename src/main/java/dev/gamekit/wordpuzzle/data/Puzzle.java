@@ -85,7 +85,6 @@ public class Puzzle {
         if (slotIsValid) {
           possibleSlots.remove(selectedSlot);
           wordSlotMap.put(word, selectedSlot);
-          System.out.printf("%s: %s\n", word, selectedSlot);
 
           int[][] slotPositions = selectedSlot.positions();
 
@@ -136,6 +135,41 @@ public class Puzzle {
     }
 
     return new Slot(positions, dir, length);
+  }
+
+  public Slot getSlot(int startRow, int startCol, int endRow, int endCol) {
+    Direction[] directions = Direction.values();
+
+    for (Direction dir : directions) {
+      List<int[]> positions = new ArrayList<>();
+      int row = startRow, col = startCol;
+      boolean endCellReached = false;
+
+      while (true) {
+        boolean posIsValid = 1 <= row && row <= rows && 1 <= col && col <= cols;
+        if (!posIsValid) break;
+
+        positions.add(new int[]{ row, col });
+
+        if (row == endRow && col == endCol) {
+          endCellReached = true;
+          break;
+        }
+
+        row += dir.row;
+        col += dir.col;
+      }
+
+      if (endCellReached) {
+        int[][] positionArray = new int[positions.size()][];
+        positionArray = positions.toArray(positionArray);
+
+        return new Slot(positionArray, dir, positionArray.length);
+      }
+    }
+
+
+    return null;
   }
 
   private void printGrid() {

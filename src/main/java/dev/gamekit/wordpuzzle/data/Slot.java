@@ -8,8 +8,6 @@ public record Slot(int[][] positions, Direction dir, int length) {
    * the intersecting positions
    */
   public int[] intersectsWith(Slot otherSlot) {
-//    if (dir == otherSlot.dir) return null;
-
     for (int idx = 0; idx < positions.length; idx++) {
       int[] pa = positions[idx];
 

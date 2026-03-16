@@ -12,6 +12,7 @@ public class Launcher extends Application {
         WindowMode.BORDERLESS,
         Antialiasing.ON,
         TextAntialiasing.ON,
+        AlphaInterpolation.QUALITY,
         RenderingStrategy.QUALITY
       )
     );
