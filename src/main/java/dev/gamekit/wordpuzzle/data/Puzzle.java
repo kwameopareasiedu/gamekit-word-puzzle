@@ -120,26 +120,15 @@ public class Puzzle {
     printGrid(wordSlotMap.values().stream().toList());
   }
 
-  private Slot getSlot(int startRow, int startCol, Direction dir, int length) {
-    int[][] positions = new int[length][2];
-    int row = startRow, col = startCol, len = 0;
+  public String getSlotWord(Slot slot) {
+    StringBuilder s = new StringBuilder();
 
-    while (len < positions.length) {
-      try {
-        boolean cellIsValid = 1 <= row && row <= rows && 1 <= col && col <= cols;
-
-        if (!cellIsValid) return null;
-
-        positions[len++] = new int[]{ row, col };
-
-        row += dir.row;
-        col += dir.col;
-      } catch (Exception ignored) {
-        return null;
-      }
+    for (int[] pos : slot.positions()) {
+      int row = pos[0], col = pos[1];
+      s.append(cells[row - 1][col - 1]);
     }
 
-    return new Slot(positions, dir, length);
+    return s.toString();
   }
 
   public Slot getSlot(int startRow, int startCol, int endRow, int endCol) {
@@ -175,6 +164,28 @@ public class Puzzle {
 
 
     return null;
+  }
+
+  private Slot getSlot(int startRow, int startCol, Direction dir, int length) {
+    int[][] positions = new int[length][2];
+    int row = startRow, col = startCol, len = 0;
+
+    while (len < positions.length) {
+      try {
+        boolean cellIsValid = 1 <= row && row <= rows && 1 <= col && col <= cols;
+
+        if (!cellIsValid) return null;
+
+        positions[len++] = new int[]{ row, col };
+
+        row += dir.row;
+        col += dir.col;
+      } catch (Exception ignored) {
+        return null;
+      }
+    }
+
+    return new Slot(positions, dir, length);
   }
 
   /** Prints the cells of the grid */

@@ -28,5 +28,28 @@
       <artifactId>engine</artifactId>
       <version>0.7.0</version>
     </dependency>
+
+    <dependency>
+      <groupId>dev.gamekit</groupId>
+      <artifactId>annotations</artifactId>
+      <version>0.1.0</version>
+    </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.14.0</version>
+        <configuration>
+          <annotationProcessors>
+            <annotationProcessor>
+              dev.gamekit.annotationprocessors.WidgetBuilderProcessor
+            </annotationProcessor>
+          </annotationProcessors>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
