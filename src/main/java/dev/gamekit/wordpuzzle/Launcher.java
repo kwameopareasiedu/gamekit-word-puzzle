@@ -8,7 +8,8 @@ public class Launcher extends Application {
     super(
       new Settings(
         "Word Puzzle",
-        Resolution.HD,
+        Resolution.FULL_HD,
+        WindowMode.BORDERLESS,
         Antialiasing.ON,
         TextAntialiasing.ON,
         RenderingStrategy.QUALITY
@@ -18,6 +19,7 @@ public class Launcher extends Application {
 
   public static void main(String[] args) {
     Launcher launcher = new Launcher();
+    launcher.loadScene(new PuzzleScene());
     launcher.run();
   }
 }
