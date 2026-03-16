@@ -11,6 +11,13 @@ public enum Direction {
   WEST(0, -1),
   NORTH_WEST(-1, -1);
 
+  public static final Direction[] READABLE = new Direction[]{
+    NORTH_EAST,
+    EAST,
+    SOUTH_EAST,
+    SOUTH,
+  };
+
   public final int row;
   public final int col;
 
@@ -18,4 +25,5 @@ public enum Direction {
     this.row = row;
     this.col = col;
   }
+
 }
