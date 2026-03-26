@@ -222,7 +222,10 @@ public class PuzzleScene extends Scene {
       lastFoundIndex = Arrays.asList(puzzleWords).indexOf(slotWord);
       updateUI();
 
-      Application.getInstance().scheduleTask(() -> lastFoundIndex = -1, 5500);
+      Application.getInstance().scheduleTask(() -> {
+        lastFoundIndex = -1;
+        updateUI();
+      }, 5500);
     }
   }
 
