@@ -1,11 +1,13 @@
 package dev.gamekit.wordpuzzle.ui;
 
+import dev.gamekit.core.IO;
 import dev.gamekit.ui.enums.Alignment;
 import dev.gamekit.ui.enums.CrossAxisAlignment;
 import dev.gamekit.ui.events.MouseEvent;
 import dev.gamekit.ui.widgets.*;
 import dev.gamekit.ui.widgets.Button;
 import dev.gamekit.ui.widgets.Panel;
+import dev.gamekit.utils.EngineImage;
 import dev.gamekit.utils.VoidCallback;
 
 import java.awt.*;
@@ -14,7 +16,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class IntroPanel extends Compose {
+  private static final EngineImage BG = IO.getImage("intro-bg.jpg");
   private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("E, MMMM dd");
+  private static final Color WORD_PANEL_BG = new Color(0xDDB3A48E, true);
 
   private final String theme;
   private final String[] words;
@@ -34,7 +38,7 @@ public class IntroPanel extends Compose {
   protected Widget build() {
     return Panel.create(
       props -> {
-        props.color = Color.DARK_GRAY;
+        props.background = BG;
         props.cornerRadius = 16;
       },
       Padding.create(
@@ -52,9 +56,9 @@ public class IntroPanel extends Compose {
           Text.create(
             props -> {
               props.text = theme;
+              props.alignment = Alignment.CENTER;
               props.fontStyle = Text.BOLD;
               props.fontSize = 48;
-              props.alignment = Alignment.CENTER;
             }
           ),
           Gap.create(8, 8),
@@ -62,16 +66,15 @@ public class IntroPanel extends Compose {
             props -> {
               props.text = "Find 5 words hidden in the grid";
               props.fontStyle = Text.BOLD;
-              props.fontSize = 16;
+              props.fontSize = 20;
               props.alignment = Alignment.CENTER;
             }
           ),
-          Gap.create(8, 64),
+          Gap.create(8, 48),
           Text.create(
             props -> {
               props.text = "WORDS TO FIND";
               props.fontStyle = Text.BOLD;
-              props.fontSize = 24;
             }
           ),
           Sized.create(
@@ -80,17 +83,24 @@ public class IntroPanel extends Compose {
               props.fixedHeight = 256.0;
             },
             Grid.create(
+              props -> {
+                props.columnGapSize = 12;
+                props.rowGapSize = 12;
+              },
               Arrays.stream(words).map(
                 word -> Panel.create(
-                  props -> { },
+                  props -> {
+                    props.color = WORD_PANEL_BG;
+                    props.cornerRadius = 16;
+                  },
                   Padding.create(
                     12, 24,
-                    Text.create(
-                      props -> {
-                        props.text = word;
-                        props.fontStyle = Text.BOLD;
-                        props.fontSize = 24;
-                      }
+                    Center.create(
+                      Text.create(
+                        props -> {
+                          props.text = word;
+                        }
+                      )
                     )
                   )
                 )
@@ -110,7 +120,13 @@ public class IntroPanel extends Compose {
                     onStart.run();
                 };
               },
-              Text.create("START")
+              Text.create(
+                props -> {
+                  props.text = "START";
+                  props.fontSize = 36;
+                  props.fontHeightRatio = 0.7;
+                }
+              )
             )
           )
         )

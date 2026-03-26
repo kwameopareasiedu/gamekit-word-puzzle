@@ -13,6 +13,7 @@ import dev.gamekit.wordpuzzle.data.Slot;
 import dev.gamekit.wordpuzzle.ui.GestureDetector;
 import dev.gamekit.wordpuzzle.ui.GestureDetectorConfig;
 import dev.gamekit.wordpuzzle.ui.IntroPanel;
+import dev.gamekit.wordpuzzle.ui.RootStack;
 import dev.kwameopareasiedu.simpson.Simpson;
 import dev.kwameopareasiedu.simpson.nodes.ArrayNode;
 import dev.kwameopareasiedu.simpson.nodes.Node;
@@ -108,141 +109,139 @@ public class PuzzleScene extends Scene {
 
   @Override
   protected Widget createUI() {
-    if (gameState == GameState.INIT)
-      return Empty.create();
-
-    if (gameState == GameState.FETCHING_DATA)
-      return Center.create(
-        Column.create(
-          props -> props.crossAxisAlignment = CrossAxisAlignment.CENTER,
-          Sized.create(
-            props -> {
-              props.fixedWidth = 64.0;
-              props.fixedHeight = 64.0;
-            },
-            Spinner.create()
-          ),
-          Text.create("Please wait...")
-        )
-      );
-
-    if (gameState == GameState.FETCHED_DATA)
-      return Center.create(
-        IntroPanel.create(puzzleTheme, puzzleWords, () -> {
-          gameState = GameState.STARTED;
-          updateUI();
-        })
-      );
-
-    if (gameState != GameState.STARTED)
-      return Empty.create();
-
-    return Stack.create(
-      Align.create(
-        props -> {
-          props.horizontalAlignment = Alignment.START;
-          props.verticalAlignment = Alignment.CENTER;
-        },
-        Padding.create(
-          96,
-          Column.create(
-            props -> props.crossAxisAlignment = CrossAxisAlignment.CENTER,
-            Text.create(
-              props -> {
-                props.text = "Find These Words";
-                props.fontSize = 32;
-              }
-            ),
-            Gap.create(16, 16),
+    return RootStack.create(
+      gameState == GameState.INIT ?
+        Empty.create() :
+        gameState == GameState.FETCHING_DATA ?
+          Center.create(
             Column.create(
               props -> props.crossAxisAlignment = CrossAxisAlignment.CENTER,
-              Arrays.stream(puzzleWords).map(
-                word -> Panel.create(
+              Sized.create(
+                props -> {
+                  props.fixedWidth = 64.0;
+                  props.fixedHeight = 64.0;
+                },
+                Spinner.create()
+              ),
+              Text.create("Please wait...")
+            )
+          ) :
+          gameState == GameState.FETCHED_DATA ?
+            Center.create(
+              IntroPanel.create(puzzleTheme, puzzleWords, () -> {
+                gameState = GameState.STARTED;
+                updateUI();
+              })
+            ) :
+            gameState != GameState.STARTED ?
+              Empty.create() :
+              Stack.create(
+                Align.create(
                   props -> {
-                    props.cornerRadius = 32;
-                    props.color = foundWords.contains(word) ? Color.GREEN : Color.ORANGE;
+                    props.horizontalAlignment = Alignment.START;
+                    props.verticalAlignment = Alignment.CENTER;
                   },
                   Padding.create(
-                    20, 28,
-                    Text.create(
+                    96,
+                    Column.create(
+                      props -> props.crossAxisAlignment = CrossAxisAlignment.CENTER,
+                      Text.create(
+                        props -> {
+                          props.text = "Find These Words";
+                          props.fontSize = 32;
+                        }
+                      ),
+                      Gap.create(16, 16),
+                      Column.create(
+                        props -> props.crossAxisAlignment = CrossAxisAlignment.CENTER,
+                        Arrays.stream(puzzleWords).map(
+                          word -> Panel.create(
+                            props -> {
+                              props.cornerRadius = 32;
+                              props.color = foundWords.contains(word) ? Color.GREEN : Color.ORANGE;
+                            },
+                            Padding.create(
+                              20, 28,
+                              Text.create(
+                                props -> {
+                                  props.text = word;
+                                  props.color = Color.BLACK;
+                                  props.fontStyle = Text.BOLD;
+                                  props.fontSize = 24;
+                                }
+                              )
+                            )
+                          )
+                        ).toArray(Widget[]::new)
+                      )
+                    )
+                  )
+                ),
+                Align.create(
+                  props -> {
+                    props.horizontalAlignment = Alignment.CENTER;
+                    props.verticalAlignment = Alignment.START;
+                  },
+                  Padding.create(
+                    48,
+                    Stack.create(
+                      Opacity.create(
+                        0.25,
+                        Text.create(
+                          props -> {
+                            props.text = "00:00";
+                            props.font = CLOCK_FONT;
+                            props.fontSize = 96;
+                          }
+                        )
+                      ),
+                      Text.create(
+                        props -> {
+                          props.text = getFormattedTimer();
+                          props.font = CLOCK_FONT;
+                          props.fontSize = 96;
+                        }
+                      )
+                    )
+                  )
+                ),
+                Padding.create(
+                  128, 0, 0, 0,
+                  Center.create(
+                    Sized.create(
                       props -> {
-                        props.text = word;
-                        props.color = Color.BLACK;
-                        props.fontStyle = Text.BOLD;
-                        props.fontSize = 24;
-                      }
+                        props.fixedWidth = 768.0;
+                        props.fixedHeight = 768.0;
+                      },
+                      GestureDetector.create(
+                        (GestureDetectorConfig.Updater) props -> {
+                          props.puzzle = puzzle;
+                          props.validSlots = validSlots;
+                          props.onSlotMarked = this::onSlotMarked;
+                        },
+                        Grid.create(
+                          props -> {
+                            props.columnCount = puzzle.cols;
+                            props.columnGapSize = props.rowGapSize = 0;
+                          },
+                          Arrays.stream(puzzle.chars).map(
+                            (ch) -> Center.create(
+                              Text.create(
+                                props -> {
+                                  props.text = ch;
+                                  props.fontStyle = Text.BOLD;
+                                  props.fontSize = 36;
+                                  props.fontHeightRatio = 0.8;
+                                }
+                              )
+                            )
+                          ).toArray(Widget[]::new)
+                        )
+                      )
                     )
                   )
                 )
-              ).toArray(Widget[]::new)
-            )
-          )
-        )
-      ),
-      Align.create(
-        props -> {
-          props.horizontalAlignment = Alignment.CENTER;
-          props.verticalAlignment = Alignment.START;
-        },
-        Padding.create(
-          48,
-          Stack.create(
-            Opacity.create(
-              0.25,
-              Text.create(
-                props -> {
-                  props.text = "00:00";
-                  props.font = CLOCK_FONT;
-                  props.fontSize = 96;
-                }
               )
-            ),
-            Text.create(
-              props -> {
-                props.text = getFormattedTimer();
-                props.font = CLOCK_FONT;
-                props.fontSize = 96;
-              }
-            )
-          )
-        )
-      ),
-      Padding.create(
-        128, 0, 0, 0,
-        Center.create(
-          Sized.create(
-            props -> {
-              props.fixedWidth = 768.0;
-              props.fixedHeight = 768.0;
-            },
-            GestureDetector.create(
-              (GestureDetectorConfig.Updater) props -> {
-                props.puzzle = puzzle;
-                props.validSlots = validSlots;
-                props.onSlotMarked = this::onSlotMarked;
-              },
-              Grid.create(
-                props -> {
-                  props.columnCount = puzzle.cols;
-                  props.columnGapSize = props.rowGapSize = 0;
-                },
-                Arrays.stream(puzzle.chars).map(
-                  (ch) -> Center.create(
-                    Text.create(
-                      props -> {
-                        props.text = ch;
-                        props.fontStyle = Text.BOLD;
-                        props.fontSize = 36;
-                        props.fontHeightRatio = 0.8;
-                      }
-                    )
-                  )
-                ).toArray(Widget[]::new)
-              )
-            )
-          )
-        )
-      )
     );
   }
 
