@@ -1,19 +1,14 @@
 package dev.gamekit.wordpuzzle;
 
 import dev.gamekit.core.Application;
-import dev.gamekit.core.IO;
 import dev.gamekit.core.Renderer;
 import dev.gamekit.core.Scene;
 import dev.gamekit.ui.enums.Alignment;
 import dev.gamekit.ui.enums.CrossAxisAlignment;
 import dev.gamekit.ui.widgets.*;
-import dev.gamekit.ui.widgets.Panel;
 import dev.gamekit.wordpuzzle.data.Puzzle;
 import dev.gamekit.wordpuzzle.data.Slot;
-import dev.gamekit.wordpuzzle.ui.GestureDetector;
-import dev.gamekit.wordpuzzle.ui.GestureDetectorConfig;
-import dev.gamekit.wordpuzzle.ui.IntroPanel;
-import dev.gamekit.wordpuzzle.ui.RootStack;
+import dev.gamekit.wordpuzzle.ui.*;
 import dev.kwameopareasiedu.simpson.Simpson;
 import dev.kwameopareasiedu.simpson.nodes.ArrayNode;
 import dev.kwameopareasiedu.simpson.nodes.Node;
@@ -30,7 +25,6 @@ import java.util.List;
 
 public class PuzzleScene extends Scene {
   private static final String WORDS_API_URL = "https://www.dailynewspuzzle.com/daily_puzzle.json";
-  private static final Font CLOCK_FONT = IO.getFont("digital-7-mono.ttf");
 
   private final List<String> foundWords;
   private final List<Slot> validSlots;
@@ -143,37 +137,8 @@ public class PuzzleScene extends Scene {
                   },
                   Padding.create(
                     96,
-                    Column.create(
-                      props -> props.crossAxisAlignment = CrossAxisAlignment.CENTER,
-                      Text.create(
-                        props -> {
-                          props.text = "Find These Words";
-                          props.fontSize = 32;
-                        }
-                      ),
-                      Gap.create(16, 16),
-                      Column.create(
-                        props -> props.crossAxisAlignment = CrossAxisAlignment.CENTER,
-                        Arrays.stream(puzzleWords).map(
-                          word -> Panel.create(
-                            props -> {
-                              props.cornerRadius = 32;
-                              props.color = foundWords.contains(word) ? Color.GREEN : Color.ORANGE;
-                            },
-                            Padding.create(
-                              20, 28,
-                              Text.create(
-                                props -> {
-                                  props.text = word;
-                                  props.color = Color.BLACK;
-                                  props.fontStyle = Text.BOLD;
-                                  props.fontSize = 24;
-                                }
-                              )
-                            )
-                          )
-                        ).toArray(Widget[]::new)
-                      )
+                    WordPreviewPanel.create(
+                      puzzleWords
                     )
                   )
                 ),
@@ -184,25 +149,7 @@ public class PuzzleScene extends Scene {
                   },
                   Padding.create(
                     48,
-                    Stack.create(
-                      Opacity.create(
-                        0.25,
-                        Text.create(
-                          props -> {
-                            props.text = "00:00";
-                            props.font = CLOCK_FONT;
-                            props.fontSize = 96;
-                          }
-                        )
-                      ),
-                      Text.create(
-                        props -> {
-                          props.text = getFormattedTimer();
-                          props.font = CLOCK_FONT;
-                          props.fontSize = 96;
-                        }
-                      )
-                    )
+                    TimerText.create(timerMs)
                   )
                 ),
                 Padding.create(
@@ -254,13 +201,6 @@ public class PuzzleScene extends Scene {
       validSlots.add(slot);
       updateUI();
     }
-  }
-
-  private String getFormattedTimer() {
-    long timerSecs = timerMs / 1000;
-    long secs = timerSecs % 60;
-    long mins = timerSecs / 60;
-    return String.format("%02d:%02d", mins, secs);
   }
 
   private enum GameState {
