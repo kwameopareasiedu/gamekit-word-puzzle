@@ -1,8 +1,9 @@
 package dev.gamekit.wordpuzzle.ui;
 
+import dev.gamekit.annotations.CustomWidgetBuilder;
+import dev.gamekit.annotations.CustomWidgetBuilderField;
 import dev.gamekit.ui.events.MouseEvent;
 import dev.gamekit.ui.widgets.Panel;
-import dev.gamekit.ui.widgets.PanelConfig;
 import dev.gamekit.ui.widgets.Widget;
 import dev.gamekit.utils.ValueCallback;
 import dev.gamekit.wordpuzzle.data.Puzzle;
@@ -10,20 +11,23 @@ import dev.gamekit.wordpuzzle.data.Slot;
 
 import java.awt.*;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * A custom {@link Panel} widget which allows words on the puzzle to be highlighted and also marks the positions of
  * discovered words
  */
+@CustomWidgetBuilder
 public class GestureDetector extends Panel {
   private static final Color BG_COLOR = Color.DARK_GRAY;
   private static final Stroke LINE_STROKE = new BasicStroke(56, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
   private static final Color LINE_COLOR = Color.GREEN;
 
-  protected Puzzle puzzle;
-  protected List<Slot> validSlots;
-  protected ValueCallback<Slot> onSlotMarked;
+  @CustomWidgetBuilderField(comparable = false)
+  public Puzzle puzzle;
+  @CustomWidgetBuilderField(comparable = false)
+  public List<Slot> validSlots;
+  @CustomWidgetBuilderField(comparable = false)
+  public ValueCallback<Slot> onSlotMarked;
 
   private boolean mouseDown = false;
   private double colSize, rowSize;
@@ -124,31 +128,5 @@ public class GestureDetector extends Panel {
     }
 
     super.handleEvent(event);
-  }
-
-  public static class GestureDetectorConfig extends PanelConfig {
-    public Puzzle puzzle;
-    public List<Slot> validSlots;
-    public ValueCallback<Slot> onSlotMarked;
-
-    @Override
-    public boolean equals(Object obj) {
-      return super.equals(obj) &&
-        obj instanceof GestureDetectorConfig gestureDetectorConfig &&
-        Objects.equals(validSlots, gestureDetectorConfig.validSlots);
-    }
-
-    @Override
-    public void updateWidget(Widget widget) {
-      super.updateWidget(widget);
-
-      GestureDetector gestureDetectorWidget = (GestureDetector) widget;
-      gestureDetectorWidget.puzzle = puzzle;
-      gestureDetectorWidget.validSlots = validSlots;
-      gestureDetectorWidget.onSlotMarked = onSlotMarked;
-    }
-
-    @FunctionalInterface
-    public interface Updater extends Widget.ConfigUpdater<GestureDetectorConfig> { }
   }
 }

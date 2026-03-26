@@ -20,6 +20,11 @@
       <name>GameKit Maven</name>
       <url>https://raw.github.com/kwameopareasiedu/gamekit-maven/master</url>
     </repository>
+
+    <repository>
+      <id>simpson-maven</id>
+      <url>https://raw.github.com/kwameopareasiedu/simpson/master/mvn</url>
+    </repository>
   </repositories>
 
   <dependencies>
@@ -34,6 +39,19 @@
       <artifactId>annotations</artifactId>
       <version>0.1.0</version>
     </dependency>
+
+    <dependency>
+      <groupId>dev.kwameopareasiedu</groupId>
+      <artifactId>simpson</artifactId>
+      <version>0.3.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>dev.kwameopareasiedu</groupId>
+      <artifactId>simpson</artifactId>
+      <version>0.3.0</version>
+      <classifier>sources</classifier>
+    </dependency>
   </dependencies>
 
   <build>
@@ -45,7 +63,7 @@
         <configuration>
           <annotationProcessors>
             <annotationProcessor>
-              dev.gamekit.annotationprocessors.WidgetBuilderProcessor
+              dev.gamekit.annotationprocessors.CustomWidgetBuilderProcessor
             </annotationProcessor>
           </annotationProcessors>
         </configuration>
