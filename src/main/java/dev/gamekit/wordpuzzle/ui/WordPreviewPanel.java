@@ -6,18 +6,22 @@ import dev.gamekit.ui.widgets.Panel;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.List;
 
 public class WordPreviewPanel extends Compose {
-  private static final Color WORD_PANEL_BG = new Color(0xDDB3A48E, true);
+  private static final Color WORD_BG = new Color(0xDDB3A48E, true);
+  private static final Color FOUND_WORD_BG = new Color(0xFFEDAF);
 
-  private final String[] words;
+  private final String[] puzzleWords;
+  private final List<String> foundWords;
 
-  public WordPreviewPanel(String[] words) {
-    this.words = words;
+  public WordPreviewPanel(String[] puzzleWords, List<String> foundWords) {
+    this.puzzleWords = puzzleWords;
+    this.foundWords = foundWords;
   }
 
-  public static WordPreviewPanel create(String[] words) {
-    return new WordPreviewPanel(words);
+  public static WordPreviewPanel create(String[] words, List<String> foundWords) {
+    return new WordPreviewPanel(words, foundWords);
   }
 
   @Override
@@ -44,23 +48,23 @@ public class WordPreviewPanel extends Compose {
             props.columnGapSize = 12;
             props.rowGapSize = 12;
           },
-          Arrays.stream(words).map(
-            word -> Panel.create(
-              props -> {
-                props.color = WORD_PANEL_BG;
-                props.cornerRadius = 16;
-              },
-              Padding.create(
-                12, 24,
-                Center.create(
-                  Text.create(
-                    props -> {
-                      props.text = word;
-                    }
+          Arrays.stream(puzzleWords).map(
+            word -> {
+              boolean found = foundWords.contains(word);
+
+              return Panel.create(
+                props -> {
+                  props.color = !found ? WORD_BG : FOUND_WORD_BG;
+                  props.cornerRadius = 16;
+                },
+                Padding.create(
+                  12, 24,
+                  Center.create(
+                    Text.create(word)
                   )
                 )
-              )
-            )
+              );
+            }
           ).toArray(Widget[]::new)
         )
       )

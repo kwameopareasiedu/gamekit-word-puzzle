@@ -34,6 +34,7 @@ public class PuzzleScene extends Scene {
   private String puzzleTheme;
   private Puzzle puzzle;
   private long timerMs = 0;
+  private int lastFoundIndex = -1;
 
   public PuzzleScene() {
     super("Puzzle Scene");
@@ -138,10 +139,29 @@ public class PuzzleScene extends Scene {
                   Padding.create(
                     96,
                     WordPreviewPanel.create(
-                      puzzleWords
+                      puzzleWords,
+                      foundWords
                     )
                   )
                 ),
+                lastFoundIndex >= 0 ?
+                  Align.create(
+                    props -> {
+                      props.horizontalAlignment = Alignment.END;
+                      props.verticalAlignment = Alignment.CENTER;
+                    },
+                    Padding.create(
+                      96,
+                      Sized.create(
+                        props -> props.fixedWidth = 450.0,
+                        WordContextPanel.create(
+                          puzzleWords[lastFoundIndex],
+                          puzzleWordContexts[lastFoundIndex]
+                        )
+                      )
+                    )
+                  ) :
+                  Empty.create(),
                 Align.create(
                   props -> {
                     props.horizontalAlignment = Alignment.CENTER;
@@ -153,7 +173,7 @@ public class PuzzleScene extends Scene {
                   )
                 ),
                 Padding.create(
-                  128, 0, 0, 0,
+                  72, 0, 0, 0,
                   Center.create(
                     Sized.create(
                       props -> {
@@ -199,7 +219,10 @@ public class PuzzleScene extends Scene {
       System.out.println(slotWord);
       foundWords.add(slotWord);
       validSlots.add(slot);
+      lastFoundIndex = Arrays.asList(puzzleWords).indexOf(slotWord);
       updateUI();
+
+      Application.getInstance().scheduleTask(() -> lastFoundIndex = -1, 5500);
     }
   }
 

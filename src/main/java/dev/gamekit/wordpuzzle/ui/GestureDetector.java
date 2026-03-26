@@ -18,9 +18,9 @@ import java.util.List;
  */
 @CustomWidgetBuilder
 public class GestureDetector extends Panel {
-  private static final Color BG_COLOR = Color.DARK_GRAY;
+  private static final Color BG_COLOR = new Color(0xAAB3A48E, true);
   private static final Stroke LINE_STROKE = new BasicStroke(56, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-  private static final Color LINE_COLOR = Color.GREEN;
+  private static final Color LINE_COLOR = new Color(0xFFEDAF);
 
   @CustomWidgetBuilderField(comparable = false)
   public Puzzle puzzle;
