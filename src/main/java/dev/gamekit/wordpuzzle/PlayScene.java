@@ -1,5 +1,8 @@
 package dev.gamekit.wordpuzzle;
 
+import dev.gamekit.audio.AudioClip;
+import dev.gamekit.audio.AudioClip2D;
+import dev.gamekit.audio.AudioGroup;
 import dev.gamekit.core.Application;
 import dev.gamekit.core.Renderer;
 import dev.gamekit.core.Scene;
@@ -25,7 +28,11 @@ import java.util.List;
 
 public class PlayScene extends Scene {
   private static final String WORDS_API_URL = "https://www.dailynewspuzzle.com/daily_puzzle.json";
+  private static final AudioClip WORD_FOUND_SFX;
 
+  static {
+    WORD_FOUND_SFX = new AudioClip2D("word-found.wav", AudioGroup.EFFECTS, 1);
+  }
   private final HttpClient client;
   private final List<String> foundWords;
   private final List<Slot> validSlots;
@@ -230,6 +237,8 @@ public class PlayScene extends Scene {
         lastFoundIndex = -1;
         updateUI();
       }, 5500);
+
+      WORD_FOUND_SFX.play();
     }
   }
 

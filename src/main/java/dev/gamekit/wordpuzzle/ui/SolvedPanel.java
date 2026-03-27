@@ -7,7 +7,6 @@ import dev.gamekit.ui.enums.ImageFit;
 import dev.gamekit.ui.enums.MainAxisAlignment;
 import dev.gamekit.ui.events.MouseEvent;
 import dev.gamekit.ui.widgets.*;
-import dev.gamekit.ui.widgets.Button;
 import dev.gamekit.ui.widgets.Image;
 import dev.gamekit.ui.widgets.Panel;
 import dev.gamekit.utils.EngineImage;
@@ -104,7 +103,7 @@ public class SolvedPanel extends Compose {
                     props.fractionalWidth = 1.0;
                     props.fixedHeight = 64.0;
                   },
-                  Button.create(
+                  AudibleButton.create(
                     props -> props.mouseListener = (ev) -> {
                       if (ev.type == MouseEvent.Type.CLICK)
                         onReplay.run();
@@ -123,7 +122,7 @@ public class SolvedPanel extends Compose {
                     props.fractionalWidth = 1.0;
                     props.fixedHeight = 64.0;
                   },
-                  Button.create(
+                  AudibleButton.create(
                     props -> props.mouseListener = (ev) -> {
                       if (ev.type == MouseEvent.Type.CLICK)
                         onExit.run();

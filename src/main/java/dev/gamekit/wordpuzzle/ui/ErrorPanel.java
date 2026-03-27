@@ -82,7 +82,7 @@ public class ErrorPanel extends Compose {
               props.fractionalWidth = 1.0;
               props.fixedHeight = 64.0;
             },
-            Button.create(
+            AudibleButton.create(
               props -> {
                 props.mouseListener = (ev) -> {
                   if (ev.type == MouseEvent.Type.CLICK)

@@ -5,7 +5,6 @@ import dev.gamekit.ui.enums.Alignment;
 import dev.gamekit.ui.enums.CrossAxisAlignment;
 import dev.gamekit.ui.events.MouseEvent;
 import dev.gamekit.ui.widgets.*;
-import dev.gamekit.ui.widgets.Button;
 import dev.gamekit.ui.widgets.Panel;
 import dev.gamekit.utils.EngineImage;
 import dev.gamekit.utils.VoidCallback;
@@ -113,7 +112,7 @@ public class IntroPanel extends Compose {
               props.fixedWidth = 512.0;
               props.fixedHeight = 64.0;
             },
-            Button.create(
+            AudibleButton.create(
               props -> {
                 props.mouseListener = (ev) -> {
                   if (ev.type == MouseEvent.Type.CLICK)
