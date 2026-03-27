@@ -104,7 +104,7 @@ public class PlayScene extends Scene {
             return Center.create(
               Sized.create(
                 props -> props.fractionalWidth = 0.4,
-                ApiErrorPanel.create(this::retrievePuzzleWords)
+                ErrorPanel.create(this::retrievePuzzleWords)
               )
             );
 
@@ -190,6 +190,18 @@ public class PlayScene extends Scene {
                   )
                 )
               )
+            ),
+            Builder.create(
+              () -> {
+                if (gameState == GameState.COMPLETED) {
+                  return SolvedPanel.create(
+                    () -> Application.getInstance().loadScene(new PlayScene()),
+                    () -> Application.getInstance().quit()
+                  );
+                }
+
+                return Empty.create();
+              }
             )
           );
         }
@@ -206,6 +218,13 @@ public class PlayScene extends Scene {
       validSlots.add(slot);
       lastFoundIndex = Arrays.asList(puzzleWords).indexOf(slotWord);
       updateUI();
+
+      if (foundWords.size() == puzzleWords.length) {
+        Application.getInstance().scheduleTask(() -> {
+          gameState = GameState.COMPLETED;
+          updateUI();
+        }, 1500);
+      }
 
       Application.getInstance().scheduleTask(() -> {
         lastFoundIndex = -1;

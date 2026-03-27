@@ -10,18 +10,18 @@ import dev.gamekit.ui.widgets.*;
 import dev.gamekit.utils.EngineImage;
 import dev.gamekit.utils.VoidCallback;
 
-public class ApiErrorPanel extends Compose {
+public class ErrorPanel extends Compose {
   private static final EngineImage LEAF = IO.getImage("leaf.png");
   private static final EngineImage BG = IO.getImage("context-bg.jpg");
 
   private final VoidCallback onRetry;
 
-  public ApiErrorPanel(VoidCallback onRetry) {
+  public ErrorPanel(VoidCallback onRetry) {
     this.onRetry = onRetry;
   }
 
-  public static ApiErrorPanel create(VoidCallback onRetry) {
-    return new ApiErrorPanel(onRetry);
+  public static ErrorPanel create(VoidCallback onRetry) {
+    return new ErrorPanel(onRetry);
   }
 
   @Override
