@@ -20,7 +20,7 @@ public class Launcher extends Application {
 
   public static void main(String[] args) {
     Launcher launcher = new Launcher();
-    launcher.loadScene(new PuzzleScene());
+    launcher.loadScene(new PlayScene());
     launcher.run();
   }
 }
