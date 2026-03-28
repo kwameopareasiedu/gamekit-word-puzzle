@@ -4,6 +4,7 @@ import dev.gamekit.audio.AudioClip;
 import dev.gamekit.audio.AudioClip2D;
 import dev.gamekit.audio.AudioGroup;
 import dev.gamekit.core.Application;
+import dev.gamekit.core.Audio;
 import dev.gamekit.core.Renderer;
 import dev.gamekit.core.Scene;
 import dev.gamekit.ui.enums.Alignment;
@@ -28,11 +29,34 @@ import java.util.List;
 
 public class PlayScene extends Scene {
   private static final String WORDS_API_URL = "https://www.dailynewspuzzle.com/daily_puzzle.json";
+  private static final AudioClip[] BG_MUSIC;
   private static final AudioClip WORD_FOUND_SFX;
+  private static int bgMusicIndex = 0;
 
   static {
     WORD_FOUND_SFX = new AudioClip2D("word-found.wav", AudioGroup.EFFECTS, 1);
+
+    AudioClip bgMusic1 = new AudioClip2D("pufino-serenity.wav", AudioGroup.MUSIC, 0.45);
+    AudioClip bgMusic2 = new AudioClip2D("pufino-thoughtful.wav", AudioGroup.MUSIC, 0.4);
+    BG_MUSIC = new AudioClip[]{ bgMusic1, bgMusic2 };
+
+    AudioClip.Event.Handler loopHandler = (ev) -> {
+      if (ev.type() == AudioClip.Event.Type.STOP) {
+        bgMusicIndex = (bgMusicIndex + 1) % BG_MUSIC.length;
+        BG_MUSIC[bgMusicIndex].play();
+      }
+    };
+
+    for (int i = 0; i < BG_MUSIC.length; i++) {
+      AudioClip clip = BG_MUSIC[i];
+
+      clip.addListener(loopHandler);
+      Audio.preload("bg" + i, clip);
+    }
+
+    Audio.get("bg0").play();
   }
+
   private final HttpClient client;
   private final List<String> foundWords;
   private final List<Slot> validSlots;
@@ -260,7 +284,7 @@ public class PlayScene extends Scene {
 
         for (Node<?> node : wordsData) {
           ObjectNode nodeData = (ObjectNode) node;
-          puzzleWords[index] = nodeData.getStringNode("word").get().toUpperCase();
+          puzzleWords[index] = nodeData.getStringNode("word").get().replaceAll("\\\\u\\d{4}", "").toUpperCase();
           puzzleWordContexts[index++] = nodeData.getStringNode("context").get();
         }
 
