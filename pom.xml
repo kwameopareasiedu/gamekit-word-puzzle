@@ -6,7 +6,8 @@
 
   <groupId>com.kwameopareasiedu</groupId>
   <artifactId>gamekit-world-puzzle</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.1.0</version>
+  <packaging>gamekit-executable</packaging>
 
   <properties>
     <maven.compiler.source>18</maven.compiler.source>
@@ -41,6 +42,12 @@
     </dependency>
 
     <dependency>
+      <groupId>dev.gamekit</groupId>
+      <artifactId>gamekit-maven-plugin</artifactId>
+      <version>0.1.0</version>
+    </dependency>
+
+    <dependency>
       <groupId>dev.kwameopareasiedu</groupId>
       <artifactId>simpson</artifactId>
       <version>0.3.0</version>
@@ -66,6 +73,16 @@
               dev.gamekit.annotationprocessors.CustomWidgetBuilderProcessor
             </annotationProcessor>
           </annotationProcessors>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>dev.gamekit</groupId>
+        <artifactId>gamekit-maven-plugin</artifactId>
+        <version>0.1.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <mainClass>dev.gamekit.wordpuzzle.Launcher</mainClass>
         </configuration>
       </plugin>
     </plugins>

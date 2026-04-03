@@ -3,14 +3,14 @@ package dev.gamekit.wordpuzzle.ui;
 import dev.gamekit.core.IO;
 import dev.gamekit.ui.enums.Alignment;
 import dev.gamekit.ui.enums.ImageFit;
+import dev.gamekit.ui.events.MouseEvent;
 import dev.gamekit.ui.widgets.*;
 import dev.gamekit.ui.widgets.Image;
-import dev.gamekit.ui.widgets.Panel;
 import dev.gamekit.utils.EngineImage;
 
 import java.awt.*;
 
-public class RootStack extends Compose {
+public class RootStack extends Stateful {
   private static final EngineImage BG = IO.getImage("puzzle-bg.jpg");
   private static final Font BASE_FONT = IO.getFont("howdybun.ttf");
   private static final EngineImage DEFAULT_BUTTON_BG = IO.getImageSliceWithInsets(
@@ -26,6 +26,7 @@ public class RootStack extends Compose {
   private final Widget child;
 
   public RootStack(Widget child) {
+    super("RootStack");
     this.child = child;
   }
 
@@ -34,55 +35,87 @@ public class RootStack extends Compose {
   }
 
   @Override
-  protected Widget build() {
-    return Theme.create(
-      props -> {
-        props.textFont = BASE_FONT;
-        props.textColor = Color.DARK_GRAY;
-        props.textFontSize = 24;
-        props.buttonDefaultBackground = DEFAULT_BUTTON_BG;
-        props.buttonHoverBackground = HOVER_BUTTON_BG;
-        props.buttonPressedBackground = PRESSED_BUTTON_BG;
-      },
-      Stack.create(
-        Sized.create(
-          props -> {
-            props.fractionalWidth = 1.0;
-            props.fractionalHeight = 1.0;
-          },
-          Image.create(
+  protected RootStackState createState() {
+    return new RootStackState();
+  }
+
+  protected static class RootStackState extends State<RootStack> {
+    private boolean showAbout = false;
+
+    @Override
+    protected Widget build(RootStack widget) {
+      return Theme.create(
+        props -> {
+          props.textFont = BASE_FONT;
+          props.textColor = Color.DARK_GRAY;
+          props.textFontSize = 24;
+          props.buttonDefaultBackground = DEFAULT_BUTTON_BG;
+          props.buttonHoverBackground = HOVER_BUTTON_BG;
+          props.buttonPressedBackground = PRESSED_BUTTON_BG;
+        },
+        Stack.create(
+          Sized.create(
             props -> {
-              props.image = BG;
-              props.fit = ImageFit.CROP;
-            }
-          )
-        ),
-        child,
-        Align.create(
-          props -> {
-            props.horizontalAlignment = Alignment.CENTER;
-            props.verticalAlignment = Alignment.END;
-          },
-          Padding.create(
-            24,
-            Panel.create(
+              props.fractionalWidth = 1.0;
+              props.fractionalHeight = 1.0;
+            },
+            Image.create(
               props -> {
-                props.color = Color.WHITE;
-                props.cornerRadius = 24;
-              },
-              Padding.create(
-                8, 16, 16, 16,
-                Text.create(
+                props.image = BG;
+                props.fit = ImageFit.CROP;
+              }
+            )
+          ),
+          widget.child,
+          Align.create(
+            props -> {
+              props.horizontalAlignment = Alignment.CENTER;
+              props.verticalAlignment = Alignment.END;
+            },
+            Padding.create(
+              24,
+              Sized.create(
+                props -> {
+                  props.useIntrinsicWidth = true;
+                  props.useIntrinsicHeight = true;
+                },
+                AudibleButton.create(
                   props -> {
-                    props.text = "DNP Clone, Created by Kwame Opare Asiedu";
-                    props.fontSize = 20;
-                  }
+                    props.mouseListener = (ev) -> {
+                      if (ev.type == MouseEvent.Type.CLICK) {
+                        showAbout = !showAbout;
+                        widget.host.triggerUpdate();
+                      }
+                    };
+                  },
+                  Padding.create(
+                    12, 18,
+                    Text.create(
+                      props -> {
+                        props.text = "About";
+                        props.fontHeightRatio = 0.7;
+                      }
+                    )
+                  )
                 )
               )
             )
+          ),
+          Builder.create(
+            () -> {
+              if (!showAbout)
+                return Empty.create();
+
+              return AboutPanel.create(
+                () -> {
+                  showAbout = false;
+                  widget.host.triggerUpdate();
+                }
+              );
+            }
           )
         )
-      )
-    );
+      );
+    }
   }
 }

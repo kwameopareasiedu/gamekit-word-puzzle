@@ -8,20 +8,20 @@ import dev.gamekit.ui.enums.MainAxisAlignment;
 import dev.gamekit.ui.widgets.*;
 import dev.gamekit.utils.EngineImage;
 
-public class WordContextPanel extends Compose {
+public class ContextPanel extends Compose {
   private static final EngineImage LEAF = IO.getImage("leaf.png");
   private static final EngineImage BG = IO.getImage("context-bg.jpg");
 
   private final String word;
   private final String context;
 
-  public WordContextPanel(String word, String context) {
+  public ContextPanel(String word, String context) {
     this.word = word;
     this.context = context;
   }
 
-  public static WordContextPanel create(String word, String context) {
-    return new WordContextPanel(word, context);
+  public static ContextPanel create(String word, String context) {
+    return new ContextPanel(word, context);
   }
 
   @Override

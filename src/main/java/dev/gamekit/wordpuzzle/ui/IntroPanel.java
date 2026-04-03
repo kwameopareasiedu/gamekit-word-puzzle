@@ -43,9 +43,7 @@ public class IntroPanel extends Compose {
       Padding.create(
         48, 48, 48, 48,
         Column.create(
-          props -> {
-            props.crossAxisAlignment = CrossAxisAlignment.STRETCH;
-          },
+          props -> props.crossAxisAlignment = CrossAxisAlignment.STRETCH,
           Text.create(
             props -> {
               props.text = DATE_FMT.format(LocalDateTime.now());
@@ -95,11 +93,7 @@ public class IntroPanel extends Compose {
                   Padding.create(
                     12, 24,
                     Center.create(
-                      Text.create(
-                        props -> {
-                          props.text = word;
-                        }
-                      )
+                      Text.create(word)
                     )
                   )
                 )
@@ -113,11 +107,9 @@ public class IntroPanel extends Compose {
               props.fixedHeight = 64.0;
             },
             AudibleButton.create(
-              props -> {
-                props.mouseListener = (ev) -> {
-                  if (ev.type == MouseEvent.Type.CLICK)
-                    onStart.run();
-                };
+              props -> props.mouseListener = (ev) -> {
+                if (ev.type == MouseEvent.Type.CLICK)
+                  onStart.invoke();
               },
               Text.create(
                 props -> {

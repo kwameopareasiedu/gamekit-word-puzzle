@@ -13,22 +13,27 @@ import dev.gamekit.utils.EngineImage;
 import dev.gamekit.utils.VoidCallback;
 
 import java.awt.*;
+import java.util.Arrays;
 
-public class SolvedPanel extends Compose {
+public class AboutPanel extends Compose {
   private static final EngineImage LEAF = IO.getImage("leaf.png");
   private static final EngineImage BG = IO.getImage("context-bg.jpg");
   private static final Color TRANSLUCENT = new Color(0x99000000, true);
+  private static final String [][] INFO = new String[][]{
+    new String[]{ "Creator", "Kwame Opare Asiedu" },
+    new String[]{ "Game Engine", "GameKit (0.7.0)" },
+    new String[]{ "Inspiration", "dailynewspuzzle.com (Organized Khaos)" },
+    new String[]{ "Assets", "Images (unsplash.com), Music (freetouse.com)" },
+  };
 
-  private final VoidCallback onReplay;
-  private final VoidCallback onExit;
+  private final VoidCallback onClose;
 
-  public SolvedPanel(VoidCallback onReplay, VoidCallback onExit) {
-    this.onReplay = onReplay;
-    this.onExit = onExit;
+  public AboutPanel(VoidCallback onClose) {
+    this.onClose = onClose;
   }
 
-  public static SolvedPanel create(VoidCallback onRetry, VoidCallback onExit) {
-    return new SolvedPanel(onRetry, onExit);
+  public static AboutPanel create(VoidCallback onExit) {
+    return new AboutPanel(onExit);
   }
 
   @Override
@@ -47,7 +52,7 @@ public class SolvedPanel extends Compose {
               Image.create(
                 props -> {
                   props.image = BG;
-                  props.fit = ImageFit.CROP;
+                  props.fit = ImageFit.STRETCH;
                 }
               )
             ),
@@ -56,7 +61,7 @@ public class SolvedPanel extends Compose {
               Column.create(
                 props -> {
                   props.crossAxisAlignment = CrossAxisAlignment.STRETCH;
-                  props.gapSize = 24;
+                  props.gapSize = 6;
                 },
                 Row.create(
                   props -> props.mainAxisAlignment = MainAxisAlignment.CENTER,
@@ -69,10 +74,10 @@ public class SolvedPanel extends Compose {
                   ),
                   Text.create(
                     props -> {
-                      props.text = "Congratulations";
+                      props.text = "Cozy Word Puzzle";
                       props.alignment = Alignment.CENTER;
                       props.fontHeightRatio = 0.7;
-                      props.fontSize = 64;
+                      props.fontSize = 48;
                     }
                   ),
                   Sized.create(
@@ -83,21 +88,30 @@ public class SolvedPanel extends Compose {
                     Image.create(LEAF)
                   )
                 ),
-                Text.create(
-                  props -> {
-                    props.text = "Awesome! You have completed today's word puzzle successfully!";
-                    props.alignment = Alignment.CENTER;
-                    props.fontSize = 32;
-                  }
+                Gap.create(32, 32),
+                Column.create(
+                  props -> props.gapSize = 24,
+                  Arrays.stream(INFO).map(item -> {
+                    String label = item[0];
+                    String value = item[1];
+
+                    return Column.create(
+                      Text.create(
+                        props -> {
+                          props.text = label;
+                          props.color = Color.GRAY;
+                        }
+                      ),
+                      Text.create(
+                        props -> {
+                          props.text = value;
+                          props.fontSize = 30;
+                        }
+                      )
+                    );
+                  }).toArray(Widget[]::new)
                 ),
-                Text.create(
-                  props -> {
-                    props.text = "Make sure to check back in tomorrow for new words.";
-                    props.alignment = Alignment.CENTER;
-                    props.fontSize = 32;
-                  }
-                ),
-                Gap.create(0, 0),
+                Gap.create(32, 32),
                 Sized.create(
                   props -> {
                     props.fractionalWidth = 1.0;
@@ -106,30 +120,11 @@ public class SolvedPanel extends Compose {
                   AudibleButton.create(
                     props -> props.mouseListener = (ev) -> {
                       if (ev.type == MouseEvent.Type.CLICK)
-                        onReplay.invoke();
+                        onClose.invoke();
                     },
                     Text.create(
                       props -> {
-                        props.text = "PLAY AGAIN";
-                        props.fontSize = 36;
-                        props.fontHeightRatio = 0.7;
-                      }
-                    )
-                  )
-                ),
-                Sized.create(
-                  props -> {
-                    props.fractionalWidth = 1.0;
-                    props.fixedHeight = 64.0;
-                  },
-                  AudibleButton.create(
-                    props -> props.mouseListener = (ev) -> {
-                      if (ev.type == MouseEvent.Type.CLICK)
-                        onExit.invoke();
-                    },
-                    Text.create(
-                      props -> {
-                        props.text = "EXIT";
+                        props.text = "BACK";
                         props.fontSize = 36;
                         props.fontHeightRatio = 0.7;
                       }

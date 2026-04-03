@@ -119,7 +119,7 @@ public class GestureDetector extends Panel {
         Slot s = puzzle.getSlot(startRow + 1, startCol + 1, endRow + 1, endCol + 1);
 
         if (s != null && onSlotMarked != null)
-          onSlotMarked.update(s);
+          onSlotMarked.invoke(s);
 
         mouseDown = false;
         startCol = startRow = endCol = endRow = 0;

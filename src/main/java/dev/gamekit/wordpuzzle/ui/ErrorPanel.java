@@ -86,7 +86,7 @@ public class ErrorPanel extends Compose {
               props -> {
                 props.mouseListener = (ev) -> {
                   if (ev.type == MouseEvent.Type.CLICK)
-                    onRetry.run();
+                    onRetry.invoke();
                 };
               },
               Text.create(

@@ -60,7 +60,7 @@ public class PlayScene extends Scene {
   private final HttpClient client;
   private final List<String> foundWords;
   private final List<Slot> validSlots;
-  private GameState gameState = GameState.INIT;
+  private GameState gameState = GameState.FETCHING_DATA;
   private String[] puzzleWordContexts;
   private String[] puzzleWords;
   private String puzzleTheme;
@@ -78,7 +78,8 @@ public class PlayScene extends Scene {
 
   @Override
   protected void start() {
-    retrievePuzzleWords();
+    Application.getInstance().scheduleTask(this::retrievePuzzleWords, 3000);
+//    retrievePuzzleWords();
   }
 
   @Override
@@ -105,9 +106,6 @@ public class PlayScene extends Scene {
     return RootStack.create(
       Builder.create(
         () -> {
-          if (gameState == GameState.INIT)
-            return Empty.create();
-
           if (gameState == GameState.FETCHING_DATA)
             return Center.create(
               Column.create(
@@ -147,7 +145,7 @@ public class PlayScene extends Scene {
               },
               Padding.create(
                 96,
-                WordPreviewPanel.create(
+                WordsPanel.create(
                   puzzleWords,
                   foundWords
                 )
@@ -167,7 +165,7 @@ public class PlayScene extends Scene {
                     96,
                     Sized.create(
                       props -> props.fixedWidth = 450.0,
-                      WordContextPanel.create(
+                      ContextPanel.create(
                         puzzleWords[lastFoundIndex],
                         puzzleWordContexts[lastFoundIndex]
                       )
@@ -307,6 +305,6 @@ public class PlayScene extends Scene {
   }
 
   private enum GameState {
-    INIT, FETCHING_DATA, FETCHED_DATA, FETCH_FAILED, STARTED, COMPLETED
+    FETCHING_DATA, FETCHED_DATA, FETCH_FAILED, STARTED, COMPLETED
   }
 }

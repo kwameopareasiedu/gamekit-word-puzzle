@@ -8,20 +8,20 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class WordPreviewPanel extends Compose {
+public class WordsPanel extends Compose {
   private static final Color WORD_BG = new Color(0xDDB3A48E, true);
   private static final Color FOUND_WORD_BG = new Color(0xFFEDAF);
 
   private final String[] puzzleWords;
   private final List<String> foundWords;
 
-  public WordPreviewPanel(String[] puzzleWords, List<String> foundWords) {
+  public WordsPanel(String[] puzzleWords, List<String> foundWords) {
     this.puzzleWords = puzzleWords;
     this.foundWords = foundWords;
   }
 
-  public static WordPreviewPanel create(String[] words, List<String> foundWords) {
-    return new WordPreviewPanel(words, foundWords);
+  public static WordsPanel create(String[] words, List<String> foundWords) {
+    return new WordsPanel(words, foundWords);
   }
 
   @Override
