@@ -1,5 +1,6 @@
 package dev.gamekit.wordpuzzle.ui;
 
+import dev.gamekit.core.Application;
 import dev.gamekit.core.IO;
 import dev.gamekit.ui.enums.Alignment;
 import dev.gamekit.ui.enums.ImageFit;
@@ -41,6 +42,7 @@ public class RootStack extends Stateful {
 
   protected static class RootStackState extends State<RootStack> {
     private boolean showAbout = false;
+    private boolean showExit = false;
 
     @Override
     protected Widget build(RootStack widget) {
@@ -74,27 +76,55 @@ public class RootStack extends Stateful {
             },
             Padding.create(
               24,
-              Sized.create(
-                props -> {
-                  props.useIntrinsicWidth = true;
-                  props.useIntrinsicHeight = true;
-                },
-                AudibleButton.create(
+              Row.create(
+                props -> props.gapSize = 24,
+                Sized.create(
                   props -> {
-                    props.mouseListener = (ev) -> {
-                      if (ev.type == MouseEvent.Type.CLICK) {
-                        showAbout = !showAbout;
-                        widget.host.triggerUpdate();
-                      }
-                    };
+                    props.useIntrinsicWidth = true;
+                    props.useIntrinsicHeight = true;
                   },
-                  Padding.create(
-                    12, 18,
-                    Text.create(
-                      props -> {
-                        props.text = "About";
-                        props.fontHeightRatio = 0.7;
-                      }
+                  AudibleButton.create(
+                    props -> {
+                      props.mouseListener = (ev) -> {
+                        if (ev.type == MouseEvent.Type.CLICK) {
+                          showAbout = !showAbout;
+                          widget.host.triggerUpdate();
+                        }
+                      };
+                    },
+                    Padding.create(
+                      12, 18,
+                      Text.create(
+                        props -> {
+                          props.text = "About";
+                          props.fontHeightRatio = 0.7;
+                        }
+                      )
+                    )
+                  )
+                ),
+                Sized.create(
+                  props -> {
+                    props.useIntrinsicWidth = true;
+                    props.useIntrinsicHeight = true;
+                  },
+                  AudibleButton.create(
+                    props -> {
+                      props.mouseListener = (ev) -> {
+                        if (ev.type == MouseEvent.Type.CLICK) {
+                          showExit = !showExit;
+                          widget.host.triggerUpdate();
+                        }
+                      };
+                    },
+                    Padding.create(
+                      12, 18,
+                      Text.create(
+                        props -> {
+                          props.text = "Quit";
+                          props.fontHeightRatio = 0.7;
+                        }
+                      )
                     )
                   )
                 )
@@ -103,15 +133,24 @@ public class RootStack extends Stateful {
           ),
           Builder.create(
             () -> {
-              if (!showAbout)
-                return Empty.create();
+              if (showExit) {
+                return ExitPanel.create(
+                  () -> Application.getInstance().quit(),
+                  () -> {
+                    showExit = false;
+                    widget.host.triggerUpdate();
+                  }
+                );
+              } else if (showAbout) {
+                return AboutPanel.create(
+                  () -> {
+                    showAbout = false;
+                    widget.host.triggerUpdate();
+                  }
+                );
+              }
 
-              return AboutPanel.create(
-                () -> {
-                  showAbout = false;
-                  widget.host.triggerUpdate();
-                }
-              );
+              return Empty.create();
             }
           )
         )
