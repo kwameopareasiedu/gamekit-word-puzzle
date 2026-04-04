@@ -17,16 +17,22 @@
 
   <repositories>
     <repository>
-      <id>gamekit-maven</id>
-      <name>GameKit Maven</name>
-      <url>https://raw.github.com/kwameopareasiedu/gamekit-maven/master</url>
+      <id>gamekit-mvn</id>
+      <url>https://raw.github.com/kwameopareasiedu/gamekit/master/artifacts</url>
     </repository>
 
     <repository>
-      <id>simpson-maven</id>
+      <id>simpson-mvn</id>
       <url>https://raw.github.com/kwameopareasiedu/simpson/master/mvn</url>
     </repository>
   </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>gamekit-mvn</id>
+      <url>https://raw.github.com/kwameopareasiedu/gamekit/master/artifacts</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <dependencies>
     <dependency>
@@ -38,12 +44,6 @@
     <dependency>
       <groupId>dev.gamekit</groupId>
       <artifactId>annotations</artifactId>
-      <version>0.1.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>dev.gamekit</groupId>
-      <artifactId>gamekit-maven-plugin</artifactId>
       <version>0.1.0</version>
     </dependency>
 
